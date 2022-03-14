@@ -29,6 +29,8 @@ $ flutter run -d ios-device-id
 $ flutter run -d macos/windows
 ```
 
+## Suported Platforms
+MacOs, Android, ios, Web, WIndows, Linux
 
 ## Appreciation 
 Spcial thanks for Bob Canning, used as backgroud image https://unsplash.com/photos/r53rNKb_7s8%20
