@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:puzzle/consts/colors.dart';
 import 'package:puzzle/states/app.state.dart';
 import 'package:puzzle/widgets/animated_dash.dart';
 import 'package:puzzle/widgets/animated_timer.dart';
 import 'package:puzzle/widgets/background.dart';
 import 'package:puzzle/widgets/puzzle.dart';
 import 'package:puzzle/widgets/level.dart';
-import 'package:puzzle/widgets/puzzle_side_bard.dart';
 
-class WebApp extends StatefulWidget {
-  const WebApp({Key? key}) : super(key: key);
+class MobileApp extends StatefulWidget {
+  const MobileApp({Key? key}) : super(key: key);
   @override
-  State<WebApp> createState() => _WebAppState();
+  State<MobileApp> createState() => _MobileAppState();
 }
 
-class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
+class _MobileAppState extends State<MobileApp> with TickerProviderStateMixin {
   late Size _screen;
   double _size = 500;
   bool _isDark = false;
@@ -23,7 +23,7 @@ class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     Size screen = MediaQuery.of(context).size;
-    _size = screen.width * 0.3;
+    _size = screen.width;
     if (mounted) {
       setState(() {});
     }
@@ -55,14 +55,6 @@ class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
             children: [
               Flexible(
                 flex: 1,
-                child: Container(
-                  width: _screen.width,
-                  color: Colors.transparent,
-                  child: const PuzzleSideBar(),
-                ),
-              ),
-              Flexible(
-                flex: 2,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,14 +72,15 @@ class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    const AnimatedTimer()
+                    const AnimatedTimer(),
+                    _status(),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        const AnimatedDash(),
+        const AnimatedDash(size: 50),
       ],
     );
   }
@@ -112,5 +105,35 @@ class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
       appState.setMode(false);
     }
     setState(() {});
+  }
+
+  Widget _status() {
+    final AppState appState = Provider.of<AppState>(context, listen: true);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          '${appState.moves} Moves | ',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: appState.darkMode
+                ? Colors.white
+                : const Color(AppColors.darkBlue),
+          ),
+        ),
+        Text(
+          '${appState.tile} Tiles',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: appState.darkMode
+                ? Colors.white
+                : const Color(AppColors.darkBlue),
+          ),
+        ),
+      ],
+    );
   }
 }

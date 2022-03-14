@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class AnimatedDash extends StatefulWidget {
-  const AnimatedDash({Key? key}) : super(key: key);
+  final double? size;
+  const AnimatedDash({Key? key, this.size}) : super(key: key);
 
   @override
   State<AnimatedDash> createState() => _AnimatedDashState();
@@ -30,8 +31,8 @@ class _AnimatedDashState extends State<AnimatedDash> {
       bottom: _dashBottom,
       left: 30,
       child: SizedBox(
-        height: 200,
-        width: 200,
+        height: widget.size ?? 200,
+        width: widget.size ?? 200,
         child: FittedBox(
           fit: BoxFit.fill,
           child: Image.asset(

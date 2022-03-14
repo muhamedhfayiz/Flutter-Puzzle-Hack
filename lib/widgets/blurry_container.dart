@@ -36,16 +36,9 @@ class BlurryContainer extends StatelessWidget {
               child: Text(
             value,
             style: TextStyle(
-              fontSize: height! * 0.4,
+              fontSize: height! * 0.3,
               fontWeight: FontWeight.bold,
               color: const Color(AppColors.darkBlue),
-              // shadows: [
-              //   Shadow(
-              //     color: Color(AppColors.darkBlue),
-              //     offset: Offset(3, 0),
-              //     blurRadius: 3,
-              //   ),
-              // ],
             ),
           )),
           decoration: BoxDecoration(

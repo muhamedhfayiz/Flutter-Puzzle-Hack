@@ -3,7 +3,9 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:puzzle/consts/colors.dart';
+import 'package:puzzle/states/app.state.dart';
 import 'package:puzzle/widgets/animated_snow.dart';
 
 class Background extends StatefulWidget {
@@ -28,7 +30,7 @@ class _BackgroundState extends State<Background> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     screen = MediaQuery.of(context).size;
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    Timer.periodic(const Duration(seconds: 2), (timer) {
       AnimatedSnow snow = AnimatedSnow(
         height: screen.height,
         top: _getRandom(screen.height.toInt()),
@@ -52,6 +54,7 @@ class _BackgroundState extends State<Background> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     screen = MediaQuery.of(context).size;
+    final AppState appState = Provider.of<AppState>(context, listen: true);
     return isImageLoaded
         ? Container(
             height: screen.height,
@@ -70,7 +73,8 @@ class _BackgroundState extends State<Background> with TickerProviderStateMixin {
                   fit: BoxFit.fill,
                   child: CustomPaint(
                     size: Size(image.width.toDouble(), image.height.toDouble()),
-                    painter: ImagePainter(image: image),
+                    painter:
+                        ImagePainter(image: image, mode: appState.darkMode),
                   ),
                 ),
                 SizedBox(
@@ -93,10 +97,12 @@ class _BackgroundState extends State<Background> with TickerProviderStateMixin {
 
 class ImagePainter extends CustomPainter {
   ui.Image image;
-  ImagePainter({required this.image});
+  bool mode;
+  ImagePainter({required this.image, required this.mode});
   @override
   Future<void> paint(Canvas canvas, Size size) async {
-    final paint = Paint()..blendMode = ui.BlendMode.softLight;
+    final paint = Paint()
+      ..blendMode = mode ? ui.BlendMode.colorBurn : ui.BlendMode.softLight;
     canvas.drawImage(image, Offset.zero, paint);
   }
 

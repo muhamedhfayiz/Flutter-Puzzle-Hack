@@ -7,7 +7,7 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       onPressed: () {},
-      child: Text('New game'),
+      child: const Text('New game'),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:puzzle/states/app.state.dart';
 import 'package:puzzle/widgets/blurry_container.dart';
+import 'package:puzzle/widgets/user_win.dart';
 
 @immutable
 class Tile extends StatefulWidget {
@@ -16,8 +17,8 @@ class Tile extends StatefulWidget {
 
   final double size;
   final int value;
-  final double top;
-  final double left;
+  double top;
+  double left;
   int index;
 
   @override
@@ -25,48 +26,31 @@ class Tile extends StatefulWidget {
 }
 
 class _TileState extends State<Tile> {
-  double _size = 0;
-  int _value = 0;
-  double _top = 0;
-  double _left = 0;
-  int _index = 0;
-
-  @override
-  void initState() {
-    _size = widget.size;
-    _value = widget.value;
-    _top = widget.top;
-    _left = widget.left;
-    _index = widget.index;
-    setState(() {});
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
-      top: _top,
-      left: _left,
+      top: widget.top,
+      left: widget.left,
       child: GestureDetector(
-        onVerticalDragEnd: (DragEndDetails details) {
-          if (details.velocity.pixelsPerSecond.dy < -250) {
+        onVerticalDragUpdate: (DragUpdateDetails details) {
+          if (details.delta.dy < 0) {
             _slideUp();
-          } else if (details.velocity.pixelsPerSecond.dy > 250) {
+          } else if (details.delta.dy > 0) {
             _slideDown();
           }
         },
-        onHorizontalDragEnd: (DragEndDetails details) {
-          if (details.velocity.pixelsPerSecond.dx < -250) {
+        onHorizontalDragUpdate: (DragUpdateDetails details) {
+          if (details.delta.dx < 0) {
             _slideLeft();
-          } else if (details.velocity.pixelsPerSecond.dx > 250) {
+          } else if (details.delta.dx > 0) {
             _slideRight();
           }
         },
         child: SizedBox(
-          width: _size,
-          height: _size,
-          child: _value == 0
+          width: widget.size,
+          height: widget.size,
+          child: widget.value == 0
               ? Container()
               : Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -79,9 +63,9 @@ class _TileState extends State<Tile> {
 
   Widget cube() {
     return BlurryContainer(
-      value: _value.toString(),
-      height: _size,
-      width: _size,
+      value: widget.value.toString(),
+      height: widget.size,
+      width: widget.size,
       borderRadius: BorderRadius.circular(10),
       bgColor: Colors.lightBlueAccent,
     );
@@ -89,28 +73,28 @@ class _TileState extends State<Tile> {
 
   _slideUp() {
     if (_canSlideUp()) {
-      _top = _top - _size;
+      widget.top = widget.top - widget.size;
       setState(() {});
     }
   }
 
   _slideDown() {
     if (_canSlideDown()) {
-      _top = _top + _size;
+      widget.top = widget.top + widget.size;
       setState(() {});
     }
   }
 
   _slideLeft() {
     if (_canSlideLeft()) {
-      _left = _left - _size;
+      widget.left = widget.left - widget.size;
       setState(() {});
     }
   }
 
   _slideRight() {
     if (_canSlideRight()) {
-      _left = _left + _size;
+      widget.left = widget.left + widget.size;
       setState(() {});
     }
   }
@@ -123,7 +107,8 @@ class _TileState extends State<Tile> {
       if (appState.grid[upIndex] == 0) {
         widget.index = upIndex;
         appState.updateGrid(
-            sourceIndex: index, targetIndex: upIndex, value: _value);
+            sourceIndex: index, targetIndex: upIndex, value: widget.value);
+        _checkPuzzleSolved();
         return true;
       }
     }
@@ -133,12 +118,13 @@ class _TileState extends State<Tile> {
   bool _canSlideDown() {
     final AppState appState = Provider.of<AppState>(context, listen: false);
     int index = widget.index;
-    int downIndex = index + 3;
-    if (downIndex <= 3 * 3) {
+    int downIndex = index + appState.level;
+    if (downIndex <= appState.level * appState.level) {
       if (appState.grid[downIndex] == 0) {
         widget.index = downIndex;
         appState.updateGrid(
-            sourceIndex: index, targetIndex: downIndex, value: _value);
+            sourceIndex: index, targetIndex: downIndex, value: widget.value);
+        _checkPuzzleSolved();
         return true;
       }
     }
@@ -149,11 +135,12 @@ class _TileState extends State<Tile> {
     final AppState appState = Provider.of<AppState>(context, listen: false);
     int index = widget.index;
     int leftIndex = index - 1;
-    if (index % 3 != 0) {
+    if (index % appState.level != 0) {
       if (appState.grid[leftIndex] == 0) {
         widget.index = leftIndex;
         appState.updateGrid(
-            sourceIndex: index, targetIndex: leftIndex, value: _value);
+            sourceIndex: index, targetIndex: leftIndex, value: widget.value);
+        _checkPuzzleSolved();
         return true;
       }
     }
@@ -164,14 +151,31 @@ class _TileState extends State<Tile> {
     final AppState appState = Provider.of<AppState>(context, listen: false);
     int index = widget.index;
     int rightIndex = index + 1;
-    if ((index + 1) % 3 != 0) {
+    if ((index + 1) % appState.level != 0) {
       if (appState.grid[rightIndex] == 0) {
         widget.index = rightIndex;
         appState.updateGrid(
-            sourceIndex: index, targetIndex: rightIndex, value: _value);
+            sourceIndex: index, targetIndex: rightIndex, value: widget.value);
+        _checkPuzzleSolved();
         return true;
       }
     }
     return false;
+  }
+
+  _checkPuzzleSolved() {
+    final AppState appState = Provider.of<AppState>(context, listen: false);
+    appState.setMoves();
+    List<int> grid = appState.grid;
+    bool isWin = true;
+    for (int i = 0; i < grid.length; i++) {
+      if (grid[i] != i) {
+        isWin = false;
+        break;
+      }
+    }
+    if (isWin) {
+      Status().userWinAlert(context);
+    }
   }
 }

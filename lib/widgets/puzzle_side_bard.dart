@@ -13,12 +13,14 @@ class PuzzleSideBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             'Puzzle Challenge',
             style: TextStyle(
-                color: Color(AppColors.darkBlue),
+                color: appState.darkMode
+                    ? Colors.white
+                    : const Color(AppColors.darkBlue),
                 fontSize: 50,
                 fontWeight: FontWeight.bold),
           ),
@@ -30,25 +32,29 @@ class PuzzleSideBar extends StatelessWidget {
           children: <Widget>[
             Text(
               '${appState.moves} Moves | ',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(AppColors.darkBlue),
+                color: appState.darkMode
+                    ? Colors.white
+                    : const Color(AppColors.darkBlue),
               ),
             ),
             Text(
               '${appState.tile} Tiles',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(AppColors.darkBlue),
+                color: appState.darkMode
+                    ? Colors.white
+                    : const Color(AppColors.darkBlue),
               ),
             ),
           ],
         ),
         const SizedBox(height: 20),
         TextButton(
-          onPressed: () {},
+          onPressed: () => appState.generateTiles(size: appState.tileSize),
           child: const Text('New game'),
           style: ButtonStyle(
             minimumSize: MaterialStateProperty.all<Size>(

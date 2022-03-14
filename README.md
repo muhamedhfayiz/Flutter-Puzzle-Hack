@@ -1,16 +1,43 @@
-# puzzle
+# Slide Puzzle
 
-A new Flutter project.
+![Photo Booth Header][logo]
 
-## Getting Started
+![coverage][coverage_badge]
+[![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
+[![License: MIT][license_badge]][license_link]
 
-This project is a starting point for a Flutter application.
+A slide puzzle built for [Flutter Challenge](https://flutterhack.devpost.com/).
 
-A few resources to get you started if this is your first Flutter project:
+*Built by [Very Good Ventures][very_good_ventures_link] in partnership with Google.*
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+*Created using [Very Good CLI][very_good_cli_link].*
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## Getting Started 🚀
+
+To run the project either use the launch configuration in VSCode/Android Studio or use the following command:
+
+- For web
+```sh
+$ flutter run -d chrome
+```
+
+- For android
+```sh
+$ flutter run -d android-device-id
+```
+
+- For iOS
+```sh
+$ flutter run -d ios-device-id
+```
+
+- For desktop
+```sh
+$ flutter run -d macos/windows
+```
+
+
+## Appreciation 
+Spcial thanks for Bob Canning, used as backgroud image https://unsplash.com/photos/r53rNKb_7s8%20

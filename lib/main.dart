@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:puzzle/screens/mobile.dart';
 import 'package:puzzle/screens/web.dart';
 import 'package:puzzle/states/providers.dart';
 
@@ -31,9 +33,19 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const WebApp(),
+        home: _getHomeScreen(),
         scrollBehavior: ScrollBehavior(),
       ),
     );
+  }
+
+  Widget _getHomeScreen() {
+    if (Platform.isAndroid) {
+      return const MobileApp();
+    } else if (Platform.isIOS) {
+      return const MobileApp();
+    } else {
+      return const WebApp();
+    }
   }
 }

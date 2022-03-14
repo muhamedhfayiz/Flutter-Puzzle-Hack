@@ -33,7 +33,9 @@ class _AnimatedSnowState extends State<AnimatedSnow>
     animationController.forward();
     animationController.addListener(() {
       if (animationController.isCompleted) {
-        animationController.dispose();
+        animationController.removeListener(() {
+          animationController;
+        });
       }
     });
     super.initState();
@@ -93,6 +95,6 @@ class SnowPainter extends CustomPainter {
 }
 
 double getRadius() {
-  List<int> radius = [4, 6, 8, 10, 12];
-  return radius[Random().nextInt(5)].toDouble();
+  List<int> radius = [2, 4, 6, 10];
+  return radius[Random().nextInt(4)].toDouble();
 }
