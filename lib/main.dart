@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       providers: Providers.providers(context),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Flutter Puzzle Hack',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -40,12 +41,16 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _getHomeScreen() {
-    if (Platform.isAndroid) {
-      return const MobileApp();
-    } else if (Platform.isIOS) {
-      return const MobileApp();
-    } else {
+    if (kIsWeb) {
       return const WebApp();
+    } else {
+      if (Platform.isAndroid) {
+        return const MobileApp();
+      } else if (Platform.isIOS) {
+        return const MobileApp();
+      } else {
+        return const WebApp();
+      }
     }
   }
 }

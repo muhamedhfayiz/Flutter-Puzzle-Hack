@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:puzzle/widgets/tile.dart';
 
 class AppState extends ChangeNotifier {
-  final List<int> _grid = [];
+  List<int> _grid = [];
   List<Tile> _tiles = [];
   int _level = 3;
   int _tile = 0;
@@ -12,6 +12,7 @@ class AppState extends ChangeNotifier {
   num _hour = 0;
   num _minute = 0;
   num _second = 0;
+  bool _stopTimer = false;
 
   List<int> get grid => _grid;
   List<Tile> get tiles => _tiles;
@@ -23,23 +24,31 @@ class AppState extends ChangeNotifier {
   num get hour => _hour;
   num get minute => _minute;
   num get second => _second;
+  bool get stopTimer => _stopTimer;
 
   void setTile(int val) {
     _tile = val;
     notifyListeners();
   }
 
-  void setTime(num second) {
-    _second++;
-    if (second == 60) {
-      _second = 0;
-      _minute++;
-    }
-    if (_minute == 60) {
-      _minute = 0;
-      _hour++;
-    }
+  void setStopTimer(bool val) {
+    _stopTimer = val;
     notifyListeners();
+  }
+
+  void setTime(num second) {
+    if (!stopTimer) {
+      _second++;
+      if (_second == 60) {
+        _second = 0;
+        _minute++;
+      }
+      if (_minute == 60) {
+        _minute = 0;
+        _hour++;
+      }
+      notifyListeners();
+    }
   }
 
   void resetTime() {
@@ -58,24 +67,32 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetMoves() {
+    _moves = 0;
+    notifyListeners();
+  }
+
   void setTileSize(double val) {
     _tileSize = val;
   }
 
   List<int> generateGrid({required int length}) {
-    _grid.clear();
-    int count = length * length;
-    for (int i = 0; i < count; i++) {
-      _grid.add(i);
-    }
-    _grid.shuffle();
+    // _grid.clear();
+    // int count = length * length;
+    // for (int i = 0; i < count; i++) {
+    //   _grid.add(i);
+    // }
+    // _grid.shuffle();
+    _grid = [1, 2, 3, 4, 5, 6, 7, 0, 8];
     return _grid;
   }
 
   void generateTiles({required double size}) {
     resetTime();
+    resetMoves();
     List<Tile> tiles = [];
     List<int> grids = generateGrid(length: level);
+    setTile(grids.length - 1);
     for (int i = 0; i < grids.length; i++) {
       Tile tile = Tile(
         index: i,
@@ -102,6 +119,7 @@ class AppState extends ChangeNotifier {
 
   void updateLevel(int val) {
     _level = val;
+    resetMoves();
     notifyListeners();
     generateTiles(size: tileSize);
   }

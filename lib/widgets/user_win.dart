@@ -37,30 +37,36 @@ class Status {
                     children: [
                       const Icon(
                         CupertinoIcons.hand_draw,
-                        color: Color(AppColors.lightBlue),
+                        color: Color(AppColors.darkBlue),
                       ),
                       Text(
-                        '${appState.moves} Moves',
+                        ' ${appState.moves} moves',
                         style:
-                            const TextStyle(color: Color(AppColors.lightBlue)),
+                            const TextStyle(color: Color(AppColors.darkBlue)),
                       ),
                     ],
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text('|',
-                        style: TextStyle(color: Color(AppColors.lightBlue))),
+                    child: Text(
+                      ' | ',
+                      style: TextStyle(
+                        color: Color(AppColors.darkBlue),
+                      ),
+                    ),
                   ),
                   Row(
                     children: [
                       const Icon(
                         CupertinoIcons.timer,
-                        color: Color(AppColors.lightBlue),
+                        color: Color(AppColors.darkBlue),
                       ),
                       Text(
-                          '${appState.hour}:${appState.minute}:${appState.second}',
-                          style: const TextStyle(
-                              color: Color(AppColors.lightBlue))),
+                        ' ${appState.hour}:${appState.minute}:${appState.second}',
+                        style: const TextStyle(
+                          color: Color(AppColors.darkBlue),
+                        ),
+                      ),
                     ],
                   )
                 ],
@@ -68,14 +74,33 @@ class Status {
             ],
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'START NEW GAME',
-                style: TextStyle(color: Color(AppColors.darkBlue)),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextButton(
+                child: const Text('New game'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all<Size>(
+                    const Size(150, 50),
+                  ),
+                  textStyle: MaterialStateProperty.all<TextStyle>(
+                    const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color(AppColors.darkBlue),
+                  ),
+                  foregroundColor: MaterialStateProperty.all<Color>(
+                    Colors.white,
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
+                ),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
             ),
           ],
         );

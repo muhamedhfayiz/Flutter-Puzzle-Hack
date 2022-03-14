@@ -21,12 +21,11 @@ class _AnimatedTimerState extends State<AnimatedTimer> {
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       AppState appState = Provider.of<AppState>(context, listen: false);
-      Timer.periodic(const Duration(seconds: 1), (val) {
+      timer = Timer.periodic(const Duration(seconds: 1), (val) {
         if (mounted) {
           setState(() {
             _rotate = _rotate + 0.5;
-            second = second + 1;
-            appState.setTime(second);
+            appState.setTime(val.tick);
           });
         }
       });
@@ -49,8 +48,10 @@ class _AnimatedTimerState extends State<AnimatedTimer> {
       children: [
         Text(
           '${appState.hour.toString().padLeft(2, '0')} : ${appState.minute.toString().padLeft(2, '0')} : ${appState.second.toString().padLeft(2, '0')}',
-          style: const TextStyle(
-            color: Color(AppColors.darkBlue),
+          style: TextStyle(
+            color: appState.darkMode
+                ? Colors.white
+                : const Color(AppColors.darkBlue),
             fontSize: 25,
             fontWeight: FontWeight.bold,
           ),
@@ -60,10 +61,10 @@ class _AnimatedTimerState extends State<AnimatedTimer> {
           turns: _rotate,
           duration: const Duration(milliseconds: 500),
           child: Icon(
-            _rotate.toInt().isEven
-                ? Icons.hourglass_top_rounded
-                : Icons.hourglass_bottom_rounded,
-            color: const Color(AppColors.darkBlue),
+            Icons.hourglass_bottom_rounded,
+            color: appState.darkMode
+                ? Colors.white
+                : const Color(AppColors.darkBlue),
             size: 30,
           ),
         ),

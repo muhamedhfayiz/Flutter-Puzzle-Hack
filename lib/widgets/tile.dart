@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:puzzle/states/app.state.dart';
@@ -36,14 +38,14 @@ class _TileState extends State<Tile> {
         onVerticalDragUpdate: (DragUpdateDetails details) {
           if (details.delta.dy < 0) {
             _slideUp();
-          } else if (details.delta.dy > 0) {
+          } else {
             _slideDown();
           }
         },
         onHorizontalDragUpdate: (DragUpdateDetails details) {
           if (details.delta.dx < 0) {
             _slideLeft();
-          } else if (details.delta.dx > 0) {
+          } else {
             _slideRight();
           }
         },
@@ -102,7 +104,7 @@ class _TileState extends State<Tile> {
   bool _canSlideUp() {
     final AppState appState = Provider.of<AppState>(context, listen: false);
     int index = widget.index;
-    int upIndex = index - 3;
+    int upIndex = index - appState.level;
     if (upIndex >= 0) {
       if (appState.grid[upIndex] == 0) {
         widget.index = upIndex;
@@ -163,19 +165,23 @@ class _TileState extends State<Tile> {
     return false;
   }
 
-  _checkPuzzleSolved() {
+  _checkPuzzleSolved() async {
     final AppState appState = Provider.of<AppState>(context, listen: false);
     appState.setMoves();
     List<int> grid = appState.grid;
     bool isWin = true;
-    for (int i = 0; i < grid.length; i++) {
-      if (grid[i] != i) {
+    for (int i = 0; i < grid.length - 1; i++) {
+      if (grid[i] != i + 1) {
         isWin = false;
         break;
       }
     }
     if (isWin) {
-      Status().userWinAlert(context);
+      appState.setStopTimer(true);
+      await Status().userWinAlert(context);
+      appState.resetTime();
+      appState.setStopTimer(false);
+      appState.resetMoves();
     }
   }
 }

@@ -67,8 +67,14 @@ class _AnimatedSnowState extends State<AnimatedSnow>
   }
 
   double calculateOpacity(max, curentValue) {
+    if (curentValue == null) {
+      return 0;
+    }
     double scrollPercentage = curentValue / max;
     double opacity = 1 - double.parse(scrollPercentage.toStringAsFixed(1));
+    if (opacity < 0) {
+      return 0;
+    }
     return opacity;
   }
 }

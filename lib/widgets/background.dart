@@ -24,13 +24,16 @@ class _BackgroundState extends State<Background> with TickerProviderStateMixin {
   @override
   void initState() {
     _loadImage();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      _startSnowAnimation();
+    });
+
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
+  void _startSnowAnimation() {
     screen = MediaQuery.of(context).size;
-    Timer.periodic(const Duration(seconds: 2), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       AnimatedSnow snow = AnimatedSnow(
         height: screen.height,
         top: _getRandom(screen.height.toInt()),

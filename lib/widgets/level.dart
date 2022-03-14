@@ -21,7 +21,6 @@ class _LevelState extends State<Level> {
   Widget build(BuildContext context) {
     return Flexible(
       child: Container(
-        // color: Colors.yellow,
         alignment: Alignment.center,
         height: 50,
         width: 300,

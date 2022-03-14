@@ -61,7 +61,7 @@ class PuzzleSideBar extends StatelessWidget {
               const Size(150, 50),
             ),
             textStyle: MaterialStateProperty.all<TextStyle>(
-              const TextStyle(color: Colors.white, fontSize: 25),
+              const TextStyle(color: Colors.white, fontSize: 22),
             ),
             backgroundColor: MaterialStateProperty.all<Color>(
               const Color(AppColors.darkBlue),
@@ -75,7 +75,7 @@ class PuzzleSideBar extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

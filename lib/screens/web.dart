@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:puzzle/consts/colors.dart';
 import 'package:puzzle/states/app.state.dart';
 import 'package:puzzle/widgets/animated_dash.dart';
 import 'package:puzzle/widgets/animated_timer.dart';
@@ -19,13 +22,34 @@ class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
   late Size _screen;
   double _size = 500;
   bool _isDark = false;
+  bool _isAppLoaded = false;
+  double _logoScale = 1.0;
+
+  @override
+  void initState() {
+    Timer(const Duration(seconds: 1), () {
+      setState(() {
+        _logoScale = 1.3;
+      });
+    });
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
     Size screen = MediaQuery.of(context).size;
     _size = screen.width * 0.3;
+    if (_size > 500) {
+      _size = _size;
+    } else {
+      _size = 500;
+    }
     if (mounted) {
-      setState(() {});
+      Timer(const Duration(seconds: 3), () {
+        setState(() {
+          _isAppLoaded = true;
+        });
+      });
     }
     super.didChangeDependencies();
   }
@@ -46,9 +70,10 @@ class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
               IconButton(
                 onPressed: () => _onThemeChange(),
                 icon: _isDark
-                    ? const Icon(CupertinoIcons.sun_max_fill)
-                    : const Icon(CupertinoIcons.moon_stars),
-              )
+                    ? const Icon(CupertinoIcons.sun_max_fill, size: 30)
+                    : const Icon(CupertinoIcons.moon_stars_fill, size: 30),
+              ),
+              const SizedBox(width: 20),
             ],
           ),
           body: Row(
@@ -88,15 +113,35 @@ class _WebAppState extends State<WebApp> with TickerProviderStateMixin {
           ),
         ),
         const AnimatedDash(),
+        _appLoader(),
       ],
     );
+  }
+
+  Widget _appLoader() {
+    if (!_isAppLoaded) {
+      return Container(
+        height: _screen.height,
+        width: _screen.width,
+        color: const Color(AppColors.darkBlue),
+        child: Center(
+          child: AnimatedScale(
+            scale: _logoScale,
+            duration: const Duration(seconds: 1),
+            child: FlutterLogo(size: _screen.width * 0.1),
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _title() {
     return Row(
       children: const <Widget>[
         Text(
-          'Flutter Hack',
+          'Flutter Puzzle Hack',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ],
