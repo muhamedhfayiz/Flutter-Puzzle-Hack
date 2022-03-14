@@ -33,12 +33,15 @@ class BlurryContainer extends StatelessWidget {
           width: width,
           padding: padding,
           child: Center(
-              child: Text(
-            value,
-            style: TextStyle(
-              fontSize: height! * 0.3,
-              fontWeight: FontWeight.bold,
-              color: const Color(AppColors.darkBlue),
+              child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: height! * 0.3,
+                fontWeight: FontWeight.bold,
+                color: const Color(AppColors.darkBlue),
+              ),
             ),
           )),
           decoration: BoxDecoration(

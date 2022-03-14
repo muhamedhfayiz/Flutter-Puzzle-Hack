@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:puzzle/widgets/tile.dart';
 
 class AppState extends ChangeNotifier {
-  List<int> _grid = [];
+  final List<int> _grid = [];
   List<Tile> _tiles = [];
   int _level = 3;
   int _tile = 0;
@@ -77,13 +77,12 @@ class AppState extends ChangeNotifier {
   }
 
   List<int> generateGrid({required int length}) {
-    // _grid.clear();
-    // int count = length * length;
-    // for (int i = 0; i < count; i++) {
-    //   _grid.add(i);
-    // }
-    // _grid.shuffle();
-    _grid = [1, 2, 3, 4, 5, 6, 7, 0, 8];
+    _grid.clear();
+    int count = length * length;
+    for (int i = 0; i < count; i++) {
+      _grid.add(i);
+    }
+    _grid.shuffle();
     return _grid;
   }
 
@@ -91,7 +90,7 @@ class AppState extends ChangeNotifier {
     resetTime();
     resetMoves();
     List<Tile> tiles = [];
-    List<int> grids = generateGrid(length: level);
+    List<int> grids = generateGrid(length: _level);
     setTile(grids.length - 1);
     for (int i = 0; i < grids.length; i++) {
       Tile tile = Tile(
